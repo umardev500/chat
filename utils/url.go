@@ -47,7 +47,6 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 
 		fieldVal := val.Elem().Field(i)
 		if paramValue != "" {
-
 			switch fieldVal.Kind() {
 			case reflect.Ptr:
 				SetStructValue(fieldVal.Kind(), paramValue, fieldVal, true)
@@ -55,7 +54,7 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 				SetStructValue(fieldVal.Kind(), paramValue, fieldVal, false)
 			}
 		} else {
-			// if the field is a default value
+			// if the field has a default value
 			defaultValue, ok := field.Tag.Lookup("default")
 			if !ok && defaultValue != "" {
 				continue
