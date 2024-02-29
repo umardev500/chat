@@ -39,11 +39,7 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 		}
 
 		// Get the value
-		paramValue, ok := data[paramName]
-		if !ok {
-			// If param not found that continue
-			continue
-		}
+		paramValue := data[paramName]
 
 		fieldVal := val.Elem().Field(i)
 		if paramValue != "" {
