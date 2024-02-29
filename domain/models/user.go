@@ -26,7 +26,7 @@ type UserCreate struct {
 }
 
 type UserUpdate struct {
-	ID       uuid.UUID `json:"-" db:"id"`
+	ID       uuid.UUID `json:"-" db:"-"`
 	Username string    `json:"username" db:"username"`
 	Email    string    `json:"email" db:"email"`
 	Password string    `json:"password" db:"password"`
@@ -39,8 +39,8 @@ type UserDelete struct {
 
 type UserFilter struct{}
 type UserPageInfo struct {
-	Offset uint64 `query:"offset" json:"offset" default:"0"`
-	Limit  uint64 `query:"limit" json:"limit" default:"12"`
+	Offset int64 `query:"offset" json:"offset" default:"0"`
+	Limit  int64 `query:"limit" json:"limit" default:"12"`
 }
 
 type UserFind struct {
