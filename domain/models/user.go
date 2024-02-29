@@ -38,7 +38,12 @@ type UserDelete struct {
 }
 
 type UserFilter struct{}
+type UserPageInfo struct {
+	Offset uint64 `query:"offset" json:"offset" default:"0"`
+	Limit  uint64 `query:"limit" json:"limit" default:"12"`
+}
 
 type UserFind struct {
-	Filter UserFilter
+	Filter   UserFilter
+	PageInfo UserPageInfo
 }
