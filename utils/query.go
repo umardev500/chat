@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+// BuildUpdateQuery builds update query based on struct
+//
+// Parameters:
+//
+//   - tbl: table name
+//   - s: pointer of struct
+//   - condition: the query condition
+//   - startIndex: let say we give it 1 it will create params start from $2...$n
 func BuildUpdateQuery(tbl string, s interface{}, condition string, startIndex int) (string, []interface{}, error) {
 	vType := reflect.TypeOf(s)
 	if vType.Kind() != reflect.Struct {

@@ -9,6 +9,7 @@ import (
 	"github.com/umardev500/chat/constants"
 	"github.com/umardev500/chat/domain"
 	"github.com/umardev500/chat/domain/models"
+	"github.com/umardev500/chat/utils"
 )
 
 type userRepository struct {
@@ -57,7 +58,7 @@ func (u *userRepository) Delete(ctx context.Context, payload models.UserDelete) 
 		return err
 	}
 
-	if affected == 0 {
+	if affected < 1 {
 		return constants.ErrNotAffected
 	}
 
@@ -101,5 +102,38 @@ func (u *userRepository) FindByID(ctx context.Context, id uuid.UUID) (user model
 	db := u.conn.TrOrDB(ctx)
 
 	err = db.QueryRowxContext(ctx, query, id).StructScan(&user)
+	return
+}
+
+func (u *userRepository) Update(ctx context.Context, payload models.UserUpdate) (err error) {
+	// Build a query string
+	condition := "id = $1"
+	query, args, err := utils.BuildUpdateQuery("users", payload, condition, 1)
+	if err != nil {
+		return
+	}
+
+	db := u.conn.TrOrDB(ctx)
+
+	// Append id as first argument
+	args = append([]interface{}{payload.ID}, args...)
+
+	// Execute query
+	result, err := db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return
+	}
+
+	// Get rows affected
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return
+	}
+
+	// Check for affected rows if less than 1 it will return not affected error
+	if affected < 1 {
+		return constants.ErrNotAffected
+	}
+
 	return
 }
