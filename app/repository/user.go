@@ -16,6 +16,7 @@ type userRepository struct {
 	conn *config.Connection
 }
 
+// NewUserRepository returns a new UserRepository
 func NewUserRepository(c *config.Connection) domain.UserRepository {
 	return &userRepository{
 		conn: c,
@@ -65,6 +66,10 @@ func (u *userRepository) Delete(ctx context.Context, payload models.UserDelete) 
 	return
 }
 
+// Find is a function that finds users from the repository.
+//
+// It takes a context and a UserFind payload as parameters.
+// It returns a slice of User and an error.
 func (u *userRepository) Find(ctx context.Context, payload models.UserFind) (users []models.User, err error) {
 	whereClause := "1=1"
 
@@ -96,6 +101,10 @@ func (u *userRepository) Find(ctx context.Context, payload models.UserFind) (use
 	return
 }
 
+// FindByID is a function that finds a user from the repository.
+//
+// It takes a context and a uuid.UUID as parameters.
+// It returns a User and an error.
 func (u *userRepository) FindByID(ctx context.Context, id uuid.UUID) (user models.User, err error) {
 	query := `SELECT u.* FROM users u WHERE id = $1;`
 
@@ -105,6 +114,10 @@ func (u *userRepository) FindByID(ctx context.Context, id uuid.UUID) (user model
 	return
 }
 
+// Update is a function that updates a user in the repository.
+//
+// It takes a context and a UserUpdate payload as parameters.
+// It returns an error.
 func (u *userRepository) Update(ctx context.Context, payload models.UserUpdate) (err error) {
 	// Build a query string
 	condition := "id = $1"
