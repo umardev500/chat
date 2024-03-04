@@ -40,12 +40,8 @@ func (u *userRepository) Create(ctx context.Context, payload models.UserCreate) 
 // It takes a context and a UserDelete payload as parameters.
 // It returns an error.
 func (u *userRepository) Delete(ctx context.Context, payload models.UserDelete) (err error) {
-	var query string
-	if payload.DeleteType == constants.SoftDelete {
-		query = `UPDATE users SET deleted_at = now() WHERE id = $1;`
-	} else {
-		query = `DELETE FROM users WHERE id = $1;`
-	}
+	softDelete := payload.DeleteType == constants.SoftDelete
+	var query string = fmt.Sprintf(`SELECT delete_record('users', %s, %t)`, payload.ID, softDelete)
 
 	db := u.conn.TrOrDB(ctx)
 
