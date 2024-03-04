@@ -9,6 +9,7 @@ import (
 	"github.com/umardev500/chat/constants"
 	"github.com/umardev500/chat/domain"
 	"github.com/umardev500/chat/domain/models"
+	"github.com/umardev500/chat/utils"
 )
 
 type chatRoomRepository struct {
@@ -116,15 +117,34 @@ func (c *chatRoomRepository) FindByID(ctx context.Context, id uuid.UUID) (chatRo
 // It takes a context and a ChatRoomUpdate payload as parameters.
 // It returns an error.
 func (c *chatRoomRepository) Update(ctx context.Context, payload models.ChatRoomUpdate) (err error) {
-	// Build your update query based on the payload
-	query := `
-		UPDATE chat_rooms
-		SET name = $2, is_group = $3
-		WHERE id = $1;
-	`
+	// Build a query string
+	condition := "id = $1"
+	query, args, err := utils.BuildUpdateQuery("user_rooms", payload, condition, 1)
+	if err != nil {
+		return
+	}
 
 	db := c.conn.TrOrDB(ctx)
 
-	_, err = db.ExecContext(ctx, query, payload.ID, payload.Name, payload.IsGroup)
+	// Append user_id and room_id as arguments
+	args = append([]interface{}{payload.ID}, args...)
+
+	// Execute query
+	result, err := db.ExecContext(ctx, query, args...)
+	if err != nil {
+		return
+	}
+
+	// Get rows affected
+	affected, err := result.RowsAffected()
+	if err != nil {
+		return
+	}
+
+	// Check for affected rows if less than 1 it will return not affected error
+	if affected < 1 {
+		return constants.ErrNotAffected
+	}
+
 	return
 }
