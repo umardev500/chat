@@ -1,0 +1,20 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "username": "user1",
+    "email": "user1@example.com",
+    "password": "password1"
+  },
+  {
+    "id": "223e4567-e89b-12d3-a456-426614174001",
+    "username": "user2",
+    "email": "user2@example.com",
+    "password": "password2"
+  },
+  {
+    "id": "323e4567-e89b-12d3-a456-426614174002",
+    "username": "user3",
+    "email": "user3@example.com",
+    "password": "password3"
+  }
+]

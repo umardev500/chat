@@ -1,0 +1,17 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "Room1",
+    "is_group": true
+  },
+  {
+    "id": "223e4567-e89b-12d3-a456-426614174001",
+    "name": null,
+    "is_group": false
+  },
+  {
+    "id": "323e4567-e89b-12d3-a456-426614174002",
+    "name": "Room3",
+    "is_group": true
+  }
+]
