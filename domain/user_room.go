@@ -8,31 +8,32 @@ import (
 )
 
 type UserRoomRepository interface {
-	// Create adds a user to a room.
+	// Create creates a new user room.
 	//
 	// Params:
 	// 	- ctx: the context
-	// 	- payload: the user room association to create
+	// 	- payload: the user room to create
 	Create(context.Context, models.UserRoomCreate) error
 
-	// Delete removes a user from a room.
+	// Delete deletes a user room.
 	//
 	// Params:
 	// 	- ctx: the context
-	// 	- payload: the user room association to delete
+	// 	- payload: the user room to delete
 	Delete(context.Context, models.UserRoomDelete) error
 
-	// FindRoomsByUserID returns the list of rooms associated with a user.
+	// Find is a function that finds user rooms from the repository.
 	//
 	// Params:
 	// 	- ctx: the context
-	// 	- userID: the ID of the user
-	FindRoomsByUserID(context.Context, uuid.UUID) ([]uuid.UUID, error)
+	// 	- payload: the user room to find
+	Find(context.Context, models.UserRoomFind) ([]models.UserRoom, error)
 
-	// FindUsersByRoomID returns the list of users associated with a room.
+	// FindByID is a function that finds a user room from the repository.
 	//
 	// Params:
 	// 	- ctx: the context
-	// 	- roomID: the ID of the room
-	FindUsersByRoomID(context.Context, uuid.UUID) ([]uuid.UUID, error)
+	// 	- userID: the user ID of the user room to find
+	// 	- roomID: the room ID of the user room to find
+	FindByID(context.Context, uuid.UUID, uuid.UUID) (models.UserRoom, error)
 }
