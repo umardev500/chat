@@ -1,0 +1,14 @@
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174001",
+    "user_id": "223e4567-e89b-12d3-a456-426614174001",
+    "room_id": "223e4567-e89b-12d3-a456-426614174001",
+    "message": "This is the first message"
+  },
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174002",
+    "user_id": "323e4567-e89b-12d3-a456-426614174002",
+    "room_id": "123e4567-e89b-12d3-a456-426614174000",
+    "message": "This is the first message from room"
+  }
+]

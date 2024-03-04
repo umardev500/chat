@@ -18,7 +18,7 @@ type Message struct {
 }
 
 type MessageCreate struct {
-	ID      uuid.UUID `json:"-" db:"id"`
+	ID      uuid.UUID `json:"id" db:"id"`
 	UserID  uuid.UUID `json:"user_id" db:"user_id"`
 	RoomID  uuid.UUID `json:"room_id" db:"room_id"`
 	Message string    `json:"message" db:"message"`

@@ -105,6 +105,12 @@ func (s *Seeder) Populate(ctx context.Context) (err error) {
 			return err
 		}
 
+		log.Info().Msgf("Messages")
+		err = s.Insert(ctx, "messages", filepath.Join(base, "messages.json"), []models.MessageCreate{})
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
 
