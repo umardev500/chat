@@ -23,11 +23,11 @@ func NewUserRoomRepository(c *config.Connection) domain.UserRoomRepository {
 }
 
 func (u *userRoomRepository) Create(ctx context.Context, payload models.UserRoomCreate) (err error) {
-	query := `INSERT INTO user_rooms (user_id, room_id) VALUES ($1, $2);`
+	query := `INSERT INTO user_rooms (id, user_id, room_id) VALUES ($1, $2, $3);`
 
 	db := u.conn.TrOrDB(ctx)
 
-	_, err = db.ExecContext(ctx, query, payload.UserID, payload.RoomID)
+	_, err = db.ExecContext(ctx, query, payload.ID, payload.UserID, payload.RoomID)
 	return
 }
 

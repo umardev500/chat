@@ -18,7 +18,7 @@ type ChatRoom struct {
 }
 
 type ChatRoomCreate struct {
-	ID      uuid.UUID `json:"-" db:"id"`
+	ID      uuid.UUID `json:"id" db:"id"`
 	Name    *string   `json:"name,omitempty" db:"name"`
 	IsGroup bool      `json:"is_group" db:"is_group"`
 }

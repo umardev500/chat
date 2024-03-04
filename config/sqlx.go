@@ -37,11 +37,13 @@ type Tx interface {
 
 type Connection struct {
 	db *sqlx.DB
+	DB *sql.DB
 }
 
 func NewConnection(db *sqlx.DB) *Connection {
 	return &Connection{
 		db: db,
+		DB: db.DB,
 	}
 }
 
