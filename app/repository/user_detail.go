@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/umardev500/chat/config"
@@ -44,13 +45,8 @@ func (u *userDetailRepository) Create(ctx context.Context, payload models.UserDe
 
 func (u *userDetailRepository) Delete(ctx context.Context, payload models.UserDelete) (err error) {
 	id := payload.ID
-	var query string
-
-	if payload.DeleteType == constants.SoftDelete {
-		query = `UPDATE user_details SET deleted_at = now() WHERE id = $1;`
-	} else {
-		query = `DELETE FROM user_details WHERE id = $1;`
-	}
+	softDelete := payload.DeleteType == constants.SoftDelete
+	var query string = fmt.Sprintf(`SELECT delete_record('users', %s, %t)`, payload.ID, softDelete)
 
 	db := u.conn.TrOrDB(ctx)
 	result, err := db.ExecContext(ctx, query, id)
