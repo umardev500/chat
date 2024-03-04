@@ -9,7 +9,7 @@ import (
 
 type ChatRoom struct {
 	ID        uuid.UUID  `json:"id" db:"id"`
-	Name      string     `json:"name,omitempty" db:"name"`
+	Name      *string    `json:"name,omitempty" db:"name"`
 	IsGroup   bool       `json:"is_group" db:"is_group"`
 	CreatedAt time.Time  `json:"created_at" db:"created_at"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty" db:"updated_at"`
@@ -19,13 +19,13 @@ type ChatRoom struct {
 
 type ChatRoomCreate struct {
 	ID      uuid.UUID `json:"-" db:"id"`
-	Name    string    `json:"name,omitempty" db:"name"`
+	Name    *string   `json:"name,omitempty" db:"name"`
 	IsGroup bool      `json:"is_group" db:"is_group"`
 }
 
 type ChatRoomUpdate struct {
 	ID      uuid.UUID `json:"-" db:"-"`
-	Name    string    `json:"name,omitempty" db:"name"`
+	Name    *string   `json:"name,omitempty" db:"name"`
 	IsGroup bool      `json:"is_group" db:"is_group"`
 }
 
