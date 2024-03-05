@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/umardev500/chat/domain"
 	"github.com/umardev500/chat/domain/models"
+	"github.com/umardev500/chat/utils"
 )
 
 type chatDelivery struct {
@@ -34,10 +35,17 @@ func (cd *chatDelivery) GetChat(c *fiber.Ctx) error {
 
 	filter := models.ChatFilter{}
 	filter.UserID = &userID
-	find := models.ChatFind{
+
+	var find models.ChatFind = models.ChatFind{
 		Filter: filter,
 	}
-	cd.uc.FindByUserID(ctx, find)
+	err = utils.ParseQueryString(c.Queries(), &find)
+	if err != nil {
+		resp := models.Response{}
+		return c.JSON(resp)
+	}
 
-	return nil
+	resp := cd.uc.FindByUserID(ctx, find)
+
+	return c.JSON(resp)
 }

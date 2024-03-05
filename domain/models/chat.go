@@ -16,8 +16,8 @@ type Chat struct {
 }
 
 type ChatFilter struct {
-	StartTime *time.Time `query:"start_time" json:"start_time"`
-	UserID    *uuid.UUID
+	LastUpdate *time.Time `query:"last_update" json:"last_update"`
+	UserID     *uuid.UUID `json:"user_id"`
 }
 
 type ChatPageInfo struct {

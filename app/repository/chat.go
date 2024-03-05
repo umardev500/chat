@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/umardev500/chat/config"
 	"github.com/umardev500/chat/domain"
@@ -22,7 +23,8 @@ func (c *chatRepository) FindByUserID(ctx context.Context, find models.ChatFind)
 	filter := find.Filter
 	userID := filter.UserID
 
-	query := `
+	whereClause := ""
+	query := fmt.Sprintf(`
 	SELECT 
 		cr.id, 
 		CASE
@@ -59,12 +61,20 @@ func (c *chatRepository) FindByUserID(ctx context.Context, find models.ChatFind)
 	) m ON true
 	WHERE 
 		ur.user_id = $1
-	AND cr.created_at > '2024-01-05T14:17:14+07:00';
-	`
+		%s
+	`, whereClause)
+
+	var args = []interface{}{userID}
+
+	// Check for filters
+	if filter.LastUpdate != nil {
+		query += " AND cr.updated_at > $2"
+		args = append(args, filter.LastUpdate)
+	}
 
 	chats = make([]models.Chat, 0)
 	db := c.conn.TrOrDB(ctx)
-	cur, err := db.QueryxContext(ctx, query, userID)
+	cur, err := db.QueryxContext(ctx, query, args...)
 	if err != nil {
 		return
 	}

@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/umardev500/chat/domain"
 	"github.com/umardev500/chat/domain/models"
@@ -18,11 +17,16 @@ func NewChatUsecase(repo domain.ChatRepository) domain.ChatUsecase {
 	}
 }
 
-func (c *chatUsecase) FindByUserID(ctx context.Context, find models.ChatFind) {
+func (c *chatUsecase) FindByUserID(ctx context.Context, find models.ChatFind) (resp models.Response) {
 	chats, err := c.repo.FindByUserID(ctx, find)
 	if err != nil {
+		resp = models.Response{}
 		return
 	}
 
-	fmt.Println(chats)
+	resp = models.Response{
+		Data: chats,
+	}
+
+	return
 }
