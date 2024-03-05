@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
@@ -12,6 +13,17 @@ import (
 
 func SetStructValue(kind reflect.Kind, value string, field reflect.Value, isPtr bool) error {
 	if isPtr {
+		tm := reflect.TypeOf((*time.Time)(nil)).Elem()
+		if field.Type().Elem() == tm {
+			timeParsed, err := time.Parse(time.RFC3339, value)
+			if err != nil {
+				return fmt.Errorf("failed to parse time: %w", err)
+			}
+
+			field.Set(reflect.ValueOf(&timeParsed))
+			return nil
+		}
+
 		uidt := reflect.TypeOf((*uuid.UUID)(nil)).Elem()
 		if field.Type().Elem() == uidt {
 			uid, err := uuid.Parse(value)
@@ -47,6 +59,26 @@ func SetStructValue(kind reflect.Kind, value string, field reflect.Value, isPtr 
 			field.Set(reflect.ValueOf(&bval))
 		}
 
+		return nil
+	}
+
+	uidT := reflect.TypeOf(uuid.UUID{})
+	if field.Type() == uidT {
+		uid, err := uuid.Parse(value)
+		if err != nil {
+			return fmt.Errorf("failed to parse uuid: %w", err)
+		}
+		field.Set(reflect.ValueOf(uid))
+		return nil
+	}
+
+	tm := reflect.TypeOf(time.Time{})
+	if field.Type() == tm {
+		timeParsed, err := time.Parse(time.RFC3339, value)
+		if err != nil {
+			return fmt.Errorf("failed to parse time: %w", err)
+		}
+		field.Set(reflect.ValueOf(timeParsed))
 		return nil
 	}
 
