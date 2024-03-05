@@ -23,7 +23,10 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 		if field.Type.Kind() == reflect.Struct {
 			fieldValue := val.Elem().Field(i)
 
-			ParseQueryString(data, fieldValue.Addr().Interface())
+			err = ParseQueryString(data, fieldValue.Addr().Interface())
+			if err != nil {
+				return err
+			}
 
 			continue
 		}
@@ -40,9 +43,15 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 		if paramValue != "" {
 			switch fieldVal.Kind() {
 			case reflect.Ptr:
-				SetStructValue(fieldVal.Kind(), paramValue, fieldVal, true)
+				err = SetStructValue(fieldVal.Kind(), paramValue, fieldVal, true)
+				if err != nil {
+					return err
+				}
 			default:
-				SetStructValue(fieldVal.Kind(), paramValue, fieldVal, false)
+				err = SetStructValue(fieldVal.Kind(), paramValue, fieldVal, false)
+				if err != nil {
+					return err
+				}
 			}
 		} else {
 			// if the field has a default value
@@ -54,9 +63,15 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 			fieldVal := val.Elem().Field(i)
 			switch fieldVal.Kind() {
 			case reflect.Ptr:
-				SetStructValue(fieldVal.Kind(), defaultValue, fieldVal, true)
+				err = SetStructValue(fieldVal.Kind(), defaultValue, fieldVal, true)
+				if err != nil {
+					return err
+				}
 			default:
-				SetStructValue(fieldVal.Kind(), defaultValue, fieldVal, false)
+				err = SetStructValue(fieldVal.Kind(), defaultValue, fieldVal, false)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
