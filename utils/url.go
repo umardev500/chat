@@ -22,14 +22,9 @@ func ParseQueryString(data map[string]string, s interface{}) (err error) {
 		// case for nested struct
 		if field.Type.Kind() == reflect.Struct {
 			fieldValue := val.Elem().Field(i)
-			structType := fieldValue.Type()
-			structPtr := reflect.New(structType).Elem()
 
-			// parse the query recursively
-			ParseQueryString(data, structPtr.Addr().Interface())
+			ParseQueryString(data, fieldValue.Addr().Interface())
 
-			// set the value
-			fieldValue.Set(structPtr)
 			continue
 		}
 
