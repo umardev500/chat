@@ -6,6 +6,10 @@ import (
 	"github.com/umardev500/chat/domain/models"
 )
 
+type ChatUsecase interface {
+	FindByUserID(context.Context, models.ChatFind)
+}
+
 type ChatRepository interface {
-	Find(context.Context, models.ChatFind) ([]models.Chat, error)
+	FindByUserID(context.Context, models.ChatFind) ([]models.Chat, error)
 }
